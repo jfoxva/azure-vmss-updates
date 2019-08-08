@@ -1,10 +1,10 @@
 #!/bin/bash -v
 omsWorkspaceName=$1
 resourceGroupName=$2
-TemplateFileUri='C:\Users\jafo\Downloads\aksengine\AKS\Azure\LogAnalyticsWorkspace.json'
-FileLogAnalyticsAgentUri='C:\Users\jafo\Downloads\aksengine\AKS\Azure\oms-daemonset.yaml'
+gitHubTemplateUri='https://raw.githubusercontent.com/jfoxva/azure-vmss-updates/master/LogAnalyticsWorkspace.json'
+gitHubLogAnalyticsAgentUri='https://raw.githubusercontent.com/jfoxva/azure-vmss-updates/master/oms-daemonset.yaml'
 #Get Log Analytics workspaceId and primary key, and deploy Log Analytics agent on the AKS cluster
-output=$(az group deployment create --resource-group $resourceGroupName --template-file $TemplateFileUri --parameters workspaceName=$omsWorkspaceName --verbose)
+output=$(az group deployment create --resource-group $resourceGroupName --template-uri $gitHubTemplateUri --parameters workspaceName=$omsWorkspaceName --verbose)
 workspaceId=$(echo $output|jq -r .properties.outputs.workspaceId.value)
 primaryKey=$(echo $output|jq -r .properties.outputs.primaryKey.value)
 workspaceIdEncoded=$(echo $workspaceId|base64 --wrap=0)
